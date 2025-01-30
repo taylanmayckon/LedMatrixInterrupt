@@ -1,4 +1,5 @@
 #include "led_matrix.h"
+#include <stdbool.h>
 
 #define MATRIX_PIN 7
 
@@ -11,95 +12,114 @@ uint8_t led_b = 0;
 #define NUM_PIXELS 25
 
 ////////////////////////////////////// FRAMES UTILIZADOS //////////////////////////////////////
-// Declaração dos frames que serão exibidos na matriz de leds
+// Note que a função que imprime dados na PIO os colocam uma linha espelhada e a seguinte correta na impressão bit a bit
+// Além de que começa de baixo para a cima a impressão a partir do vetor
+// Então a configuração dos frames tem que tomar essa forma espelhado-certo, colocando a matriz de ponta-cabeça no arranjo final (Função que imprime os bits)
+// Assim o output na matriz estará correto
+
+// Declaração dos frames que serão exibidos na matriz de leds (espelhado-certo)
 bool frame_0[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0
-    1, 0, 0, 0, 1, // Linha 1
-    1, 0, 0, 0, 1, // Linha 3
-    1, 0, 0, 0, 1, // Linha 4
-    1, 1, 1, 1, 1, // Linha 5
+    1, 1, 1, 1, 1, // Linha 0 (Certo)
+    1, 0, 0, 0, 1, // Linha 1 (Espelhado)
+    1, 0, 0, 0, 1, // Linha 2 (Certo)
+    1, 0, 0, 0, 1, // Linha 3 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 4 (Certo)
 };
 
 bool frame_1[NUM_PIXELS] = {
-    0, 0, 0, 0, 1, // Linha 0
-    0, 0, 0, 0, 1, // Linha 1
-    0, 0, 0, 0, 1, // Linha 3
-    0, 0, 0, 0, 1, // Linha 4
-    0, 0, 0, 0, 1, // Linha 5
+    0, 0, 0, 0, 1, // Linha 0 (Certo)
+    1, 0, 0, 0, 0, // Linha 1 (Espelhado)
+    0, 0, 0, 0, 1, // Linha 3 (Certo)
+    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
+    0, 0, 0, 0, 1, // Linha 5 (Certo)
 };
 
 bool frame_2[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0
-    0, 0, 0, 0, 1, // Linha 1
-    1, 1, 1, 1, 1, // Linha 3
-    1, 0, 0, 0, 0, // Linha 4
-    1, 1, 1, 1, 1, // Linha 5
+    1, 1, 1, 1, 1, // Linha 0 (Certo)
+    1, 0, 0, 0, 0, // Linha 1 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 3 (Certo)
+    0, 0, 0, 0, 1, // Linha 4 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 5 (Certo)
 };
 
 bool frame_3[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0
-    0, 0, 0, 0, 1, // Linha 1
-    1, 1, 1, 1, 1, // Linha 3
-    0, 0, 0, 0, 1, // Linha 4
-    1, 1, 1, 1, 1, // Linha 5
+    1, 1, 1, 1, 1, // Linha 0 (Certo)
+    1, 0, 0, 0, 0, // Linha 1 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 3 (Certo)
+    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 5 (Certo)
 };
 
 bool frame_4[NUM_PIXELS] = {
-    1, 0, 0, 0, 1, // Linha 0
-    1, 0, 0, 0, 1, // Linha 1
-    1, 1, 1, 1, 1, // Linha 3
-    0, 0, 0, 0, 1, // Linha 4
-    0, 0, 0, 0, 1, // Linha 5
+    1, 0, 0, 0, 1, // Linha 0 (Certo)
+    1, 0, 0, 0, 1, // Linha 1 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 3 (Certo)
+    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
+    0, 0, 0, 0, 1, // Linha 5 (Certo)
 };
 
 bool frame_5[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0
-    1, 0, 0, 0, 0, // Linha 1
-    1, 1, 1, 1, 1, // Linha 3
-    0, 0, 0, 0, 1, // Linha 4
-    1, 1, 1, 1, 1, // Linha 5
+    1, 1, 1, 1, 1, // Linha 0 (Certo)
+    0, 0, 0, 0, 1, // Linha 1 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 3 (Certo)
+    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 5 (Certo)
 };
 
 bool frame_6[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0
-    1, 0, 0, 0, 0, // Linha 1
-    1, 1, 1, 1, 1, // Linha 3
-    1, 0, 0, 0, 1, // Linha 4
-    1, 1, 1, 1, 1, // Linha 5
+    1, 1, 1, 1, 1, // Linha 0 (Certo)
+    1, 0, 0, 0, 0, // Linha 1 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 3 (Certo)
+    1, 0, 0, 0, 1, // Linha 4 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 5 (Certo)
 };
 
 bool frame_7[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0
-    0, 0, 0, 0, 1, // Linha 1
-    0, 0, 0, 0, 1, // Linha 3
-    0, 0, 0, 0, 1, // Linha 4
-    0, 0, 0, 0, 1, // Linha 5
+    1, 1, 1, 1, 1, // Linha 0 (Certo)
+    1, 0, 0, 0, 0, // Linha 1 (Espelhado)
+    0, 0, 0, 0, 1, // Linha 3 (Certo)
+    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
+    0, 0, 0, 0, 1, // Linha 5 (Certo)
 };
 
 bool frame_8[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0
-    1, 0, 0, 0, 1, // Linha 1
-    1, 1, 1, 1, 1, // Linha 3
-    1, 0, 0, 0, 1, // Linha 4
-    1, 1, 1, 1, 1, // Linha 5
+    1, 1, 1, 1, 1, // Linha 0 (Certo)
+    1, 0, 0, 0, 1, // Linha 1 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 3 (Certo)
+    1, 0, 0, 0, 1, // Linha 4 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 5 (Certo)
 };
 
 bool frame_9[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0
-    1, 0, 0, 0, 1, // Linha 1
-    1, 1, 1, 1, 1, // Linha 3
-    0, 0, 0, 0, 1, // Linha 4
-    0, 0, 0, 0, 1, // Linha 5
+    1, 1, 1, 1, 1, // Linha 0 (Certo)
+    1, 0, 0, 0, 1, // Linha 1 (Espelhado)
+    1, 1, 1, 1, 1, // Linha 3 (Certo)
+    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
+    0, 0, 0, 0, 1, // Linha 5 (Certo)
 };
 ////////////////////////////////////// FRAMES UTILIZADOS //////////////////////////////////////
+
+// Vetor que armazena os ponteiros de cada frame criado anteriormente
+bool *all_frames[10] = {
+    frame_0,
+    frame_1,
+    frame_2,
+    frame_3,
+    frame_4,
+    frame_5,
+    frame_6,
+    frame_7,
+    frame_8,
+    frame_9
+};
 
 // Buffer que armazena o frame atual
 bool led_buffer[NUM_PIXELS] = {
     1, 1, 1, 1, 1, // Linha 0
     1, 0, 0, 0, 1, // Linha 1
-    1, 0, 0, 0, 1, // Linha 3
-    1, 0, 0, 0, 1, // Linha 4
-    1, 1, 1, 1, 1, // Linha 5
+    1, 1, 1, 1, 1, // Linha 3
+    0, 0, 0, 0, 1, // Linha 4
+    0, 0, 0, 0, 1, // Linha 5
 };
 
 static inline void put_pixel(uint32_t pixel_grb){
@@ -117,7 +137,8 @@ void set_one_led(uint8_t r, uint8_t g, uint8_t b){
     uint32_t color = urgb_u32(r, g, b);
 
     // Define todos os LEDs com a cor especificada
-    for (int i = 0; i < NUM_PIXELS; i++){
+    // Faz o processo de virar de cabeça para baixo o arranjo
+    for (int i = NUM_PIXELS-1; i >= 0; i--){
         if (led_buffer[i]){
             put_pixel(color); // Liga o LED com um no buffer
         }
@@ -128,18 +149,14 @@ void set_one_led(uint8_t r, uint8_t g, uint8_t b){
 }
 
 // Função que faz as operações necessárias para atualizar o display
-void atualiza_numero(uint16_t numero){
+void atualiza_numero(int numero){
     // Pegando o ponteiro para o frame selecionado
-    //bool* ponteiro_selecionado = all_frames[numero];
-    // Criando a variável para armazenar os valores do frame selecionado
-    //bool frame_selecionado;
+    bool* ponteiro_selecionado = all_frames[numero];
 
     // Extraindo cada elemento para a variável criada
-    //for (int i = 0; i < 5; i++){
-    //    for (int j = 0; j < 5; j++){
-    //        frame_selecionado[i][j] = (*ponteiro_selecionado)[i][j];
-    //    }
-    //}
+    for (int i = 0; i < NUM_PIXELS; i++){
+        led_buffer[i] = ponteiro_selecionado[i];
+    }
 
     // Chamando a função que vai imprimir o número
     set_one_led(led_r, led_g, led_b);

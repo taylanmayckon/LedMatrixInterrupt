@@ -23,7 +23,7 @@
 // Variável que verifica e atualiza o estado do LED VERMELHO
 bool led_on = false;
 // Variável de contador para a interrupção
-uint16_t contador = 6;
+int contador = 0;
 // Variável que armazena o tempo do último evento, em microssegundos (para implementar o debounce)
 static volatile uint32_t last_time = 0;
 
@@ -42,10 +42,19 @@ void gpio_irq_handler(uint gpio, uint32_t events){
         last_time = current_time;
 
         // Imprime o número na matriz com base no botão pressionado
-        if(gpio == BUTTON_A){ // Incrementa o número exibido
-            atualiza_numero(contador);
+        if(gpio == BUTTON_A){          // Incrementa o número exibido
+            contador ++;               // Incrementa o contador em 1
+            if(contador > 9){            // Verifica se não vai estourar o valor máximo do display (9)
+                contador = 9;          // Se passar atribui o valor máximo
+            }
+            atualiza_numero(contador); // Atualiza o número mostrado na matriz
         }
         if(gpio == BUTTON_B){ // Decrementa o número exibido
+            contador --;               // Decrementa o contador em 1
+            if(contador < 1){            // Verifica se não vai estourar o valor mínimo do display (0)
+                contador = 0;          // Se passar atribui o valor mínimo
+            }
+
             atualiza_numero(contador);
         }
     }
@@ -75,6 +84,9 @@ int main(){
     // Configuração das interrupções
     gpio_set_irq_enabled_with_callback(BUTTON_A, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
     gpio_set_irq_enabled_with_callback(BUTTON_B, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
+
+    // Imprimindo um primeiro valor na matriz, valor 0
+    atualiza_numero(contador);
 
     while (true) {
         // Alternando o estado do led a cada 100ms (gera um período de 200ms = 5 piscadas por segundo)
