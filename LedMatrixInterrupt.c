@@ -41,11 +41,11 @@ uint pio_config(PIO pio){
 // Função de interrupção
 void gpio_irq_handler(uint gpio, uint32_t events){
     // Inicialmente vai blinkar outras cores, só para teste
-    if(gpio == 5){
+    if(gpio == BUTTON_A){
         bool estado_green = gpio_get(RGB_GREEN);
         gpio_put(RGB_GREEN, !estado_green);
     }
-    if(gpio == 6){
+    if(gpio == BUTTON_B){
         bool estado_blue = gpio_get(RGB_BLUE);
         gpio_put(RGB_BLUE, !estado_blue);
     }
