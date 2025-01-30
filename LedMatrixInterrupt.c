@@ -3,6 +3,7 @@
 #include "pico/stdlib.h"
 #include "hardware/pio.h"
 #include "hardware/clocks.h"
+#include "hardware/timer.h"
 #include "pio_matrix.pio.h"
 #include "libs/led_matrix/led_matrix.h"
 
@@ -19,8 +20,12 @@
 // Máscara para GPIO dos botões
 #define INPUT_MASK ((1 << BUTTON_A) | (1 << BUTTON_B))
 
+// Variável que verifica e atualiza o estado do LED VERMELHO
+bool led_on = false;
 // Variável de contador para a interrupção
 uint16_t contagem = 0;
+// Variável que armazena o tempo do último evento, em microssegundos (para implementar o debounce)
+static volatile uint32_t last_time = 0;
 
 // Função de configuração do PIO
 uint pio_config(PIO pio){
@@ -42,14 +47,23 @@ uint pio_config(PIO pio){
 
 // Função de interrupção
 void gpio_irq_handler(uint gpio, uint32_t events){
-    // Inicialmente vai blinkar outras cores, só para teste
-    if(gpio == BUTTON_A){
-        bool estado_green = gpio_get(RGB_GREEN);
-        gpio_put(RGB_GREEN, !estado_green);
-    }
-    if(gpio == BUTTON_B){
-        bool estado_blue = gpio_get(RGB_BLUE);
-        gpio_put(RGB_BLUE, !estado_blue);
+    // Obtendo o tempo atual (em microssegundos)
+    uint32_t current_time = to_us_since_boot(get_absolute_time());
+
+    // Verificando se passou tempo suficiente desde o último evento (para implementar o debounce)
+    if(current_time - last_time > 200000){
+        // Atualizando o last_time para a próxima verificação de debounce
+        last_time = current_time;
+
+        // Inicialmente vai blinkar outras cores, só para teste
+        if(gpio == BUTTON_A){
+            bool estado_green = gpio_get(RGB_GREEN);
+            gpio_put(RGB_GREEN, !estado_green);
+        }
+        if(gpio == BUTTON_B){
+            bool estado_blue = gpio_get(RGB_BLUE);
+            gpio_put(RGB_BLUE, !estado_blue);
+        }
     }
 }
 

@@ -6,7 +6,7 @@
 static const RGB_cod cor_0 = {0.0, 0.0, 0.0};
 static const RGB_cod cor_1 = {0.0, 100.0/255.0, 0.0};
 
-////////////////////////////////////// FAMES UTILIZADOS //////////////////////////////////////
+////////////////////////////////////// FRAMES UTILIZADOS //////////////////////////////////////
 // Declaração dos frames que serão exibidos na matriz de leds
 Matrix_frames frame_0 = {
 //Cols 0      1      3      4      5
@@ -97,7 +97,7 @@ Matrix_frames frame_9 = {
     {cor_0, cor_0, cor_0, cor_0, cor_1}, // Linha 4
     {cor_0, cor_0, cor_0, cor_0, cor_1}, // Linha 5
 };
-////////////////////////////////////// FAMES UTILIZADOS //////////////////////////////////////
+////////////////////////////////////// FRAMES UTILIZADOS //////////////////////////////////////
 
 // Vetor de ponteiros para os frames utilizados (no caso armazena os endereços dos frames declarados anteriormente)
 Frames_compiled all_frames = {
