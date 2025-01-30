@@ -47,15 +47,16 @@ void gpio_irq_handler(uint gpio, uint32_t events){
             if(contador > 9){            // Verifica se não vai estourar o valor máximo do display (9)
                 contador = 9;          // Se passar atribui o valor máximo
             }
-            atualiza_numero(contador); // Atualiza o número mostrado na matriz
+            // Parâmetros são: número a ser exibido, operação realizada (+: incremento)
+            atualiza_numero(contador, '+'); // Atualiza o número mostrado na matriz
         }
         if(gpio == BUTTON_B){ // Decrementa o número exibido
             contador --;               // Decrementa o contador em 1
             if(contador < 1){            // Verifica se não vai estourar o valor mínimo do display (0)
                 contador = 0;          // Se passar atribui o valor mínimo
             }
-
-            atualiza_numero(contador);
+            // Parâmetros são: número a ser exibido, operação realizada (-: decremento)
+            atualiza_numero(contador, '-');
         }
     }
 }
@@ -86,7 +87,7 @@ int main(){
     gpio_set_irq_enabled_with_callback(BUTTON_B, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
 
     // Imprimindo um primeiro valor na matriz, valor 0
-    atualiza_numero(contador);
+    atualiza_numero(contador, '+');
 
     while (true) {
         // Alternando o estado do led a cada 100ms (gera um período de 200ms = 5 piscadas por segundo)

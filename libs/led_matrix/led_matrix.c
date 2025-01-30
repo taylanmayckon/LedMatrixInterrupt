@@ -3,10 +3,14 @@
 
 #define MATRIX_PIN 7
 
+// Variável que define a intensidade do brilho dos LEDS
+static const uint8_t intensidade_max = 10;
+
 // Declaração das cores dos frames que serão usados na matriz de leds
-uint8_t led_r = 200;
-uint8_t led_g = 0;
+uint8_t led_r = 0;
+uint8_t led_g = intensidade_max;
 uint8_t led_b = 0;
+
 
 // Quantidade de pixels
 #define NUM_PIXELS 25
@@ -68,7 +72,7 @@ bool frame_5[NUM_PIXELS] = {
 
 bool frame_6[NUM_PIXELS] = {
     1, 1, 1, 1, 1, // Linha 0 (Certo)
-    1, 0, 0, 0, 0, // Linha 1 (Espelhado)
+    0, 0, 0, 0, 1, // Linha 1 (Espelhado)
     1, 1, 1, 1, 1, // Linha 3 (Certo)
     1, 0, 0, 0, 1, // Linha 4 (Espelhado)
     1, 1, 1, 1, 1, // Linha 5 (Certo)
@@ -149,7 +153,21 @@ void set_one_led(uint8_t r, uint8_t g, uint8_t b){
 }
 
 // Função que faz as operações necessárias para atualizar o display
-void atualiza_numero(int numero){
+void atualiza_numero(int numero, char sinal){
+    // Altera a cor do display com base na operação
+    // Se houver decremento, mostra vermelho
+    if(sinal == '-'){
+        led_r = intensidade_max;
+        led_g = 0;
+        led_b = 0;
+    }
+    // Se houver incremento, mostra verde
+    if(sinal == '+'){
+        led_r = 0;
+        led_g = intensidade_max;
+        led_b = 0;
+    }
+
     // Pegando o ponteiro para o frame selecionado
     bool* ponteiro_selecionado = all_frames[numero];
 
