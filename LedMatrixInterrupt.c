@@ -4,7 +4,6 @@
 #include "hardware/pio.h"
 #include "hardware/clocks.h"
 #include "hardware/timer.h"
-#include "pio_matrix.pio.h"
 #include "libs/led_matrix/led_matrix.h"
 
 // Definição dos pinos do Led RGB
@@ -23,9 +22,13 @@
 // Variável que verifica e atualiza o estado do LED VERMELHO
 bool led_on = false;
 // Variável de contador para a interrupção
-uint16_t contagem = 0;
+uint16_t contador = 6;
 // Variável que armazena o tempo do último evento, em microssegundos (para implementar o debounce)
 static volatile uint32_t last_time = 0;
+
+// Variáveis da PIO declaradas no escopo global
+PIO pio;
+uint sm;
 
 // Função de configuração do PIO
 uint pio_config(PIO pio){
@@ -55,14 +58,12 @@ void gpio_irq_handler(uint gpio, uint32_t events){
         // Atualizando o last_time para a próxima verificação de debounce
         last_time = current_time;
 
-        // Inicialmente vai blinkar outras cores, só para teste
-        if(gpio == BUTTON_A){
-            bool estado_green = gpio_get(RGB_GREEN);
-            gpio_put(RGB_GREEN, !estado_green);
+        // Imprime o número na matriz com base no botão pressionado
+        if(gpio == BUTTON_A){ // Incrementa o número exibido
+            atualiza_numero(contador, pio, sm);
         }
-        if(gpio == BUTTON_B){
-            bool estado_blue = gpio_get(RGB_BLUE);
-            gpio_put(RGB_BLUE, !estado_blue);
+        if(gpio == BUTTON_B){ // Decrementa o número exibido
+            atualiza_numero(contador, pio, sm);
         }
     }
 }
@@ -81,11 +82,9 @@ int main(){
     gpio_pull_up(BUTTON_A);
     gpio_pull_up(BUTTON_B);
 
-    // Configurando os pinos de pull_up
-
     // Inicializando a PIO
-    PIO pio = pio0;
-    uint sm = pio_config(pio);
+    pio = pio0;
+    sm = pio_config(pio);
 
     // Configuração das interrupções
     gpio_set_irq_enabled_with_callback(BUTTON_A, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
@@ -98,5 +97,3 @@ int main(){
         sleep_ms(100);
     }
 }
-
-

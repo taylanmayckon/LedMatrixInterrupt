@@ -4,7 +4,7 @@
 
 // Declaração das cores dos frames que serão usados na matriz de leds
 static const RGB_cod cor_0 = {0.0, 0.0, 0.0};
-static const RGB_cod cor_1 = {0.0, 100.0/255.0, 0.0};
+static const RGB_cod cor_1 = {0.0, 255.0/255.0, 0.0};
 
 ////////////////////////////////////// FRAMES UTILIZADOS //////////////////////////////////////
 // Declaração dos frames que serão exibidos na matriz de leds
@@ -112,3 +112,59 @@ Frames_compiled all_frames = {
     &frame_8,
     &frame_9,
 };
+
+
+// Função que vai transformar valores normalizados (0-1) em binários correspondentes ao padrão RGB
+uint32_t gera_binario_rgb(double red, double green, double blue){
+    unsigned char RED, GREEN, BLUE;
+    RED = red * 255.0;
+    GREEN = green * 255.0;
+    BLUE = blue * 255.0;
+    return (GREEN << 24) | (RED << 16) | (BLUE << 8);
+}
+
+// Função que vai imprimir o desenho do frame em questão
+void imprime_numero(Matrix_frames frame, PIO pio, uint sm){
+    for(int contador_linha = 4; contador_linha >= 0; contador_linha--){
+        if(contador_linha % 2){
+            for(int contador_coluna; contador_coluna < 5; contador_coluna ++){
+                uint32_t valor_cor_binario = gera_binario_rgb(
+                    frame[contador_linha][contador_coluna].red,
+                    frame[contador_linha][contador_coluna].green,
+                    frame[contador_linha][contador_coluna].blue
+                );
+
+                pio_sm_put_blocking(pio, sm, valor_cor_binario);
+            }
+        }
+        else {
+            for(int contador_coluna = 4; contador_coluna >= 0; contador_coluna --){
+                uint32_t valor_cor_binario = gera_binario_rgb(
+                    frame[contador_linha][contador_coluna].red,
+                    frame[contador_linha][contador_coluna].green,
+                    frame[contador_linha][contador_coluna].blue
+                );
+
+                pio_sm_put_blocking(pio, sm, valor_cor_binario);
+            }
+        }
+    }
+}
+
+// Função que faz as operações necessárias para atualizar o display
+void atualiza_numero(uint16_t numero, PIO pio, uint sm){
+    // Pegando o ponteiro para o frame selecionado
+    Matrix_frames* ponteiro_selecionado = all_frames[numero];
+    // Criando a variável para armazenar os valores do frame selecionado
+    Matrix_frames frame_selecionado;
+
+    // Extraindo cada elemento para a variável criada
+    for (int i = 0; i < 5; i++){
+        for (int j = 0; j < 5; j++){
+            frame_selecionado[i][j] = (*ponteiro_selecionado)[i][j];
+        }
+    }
+
+    // Chamando a função que vai imprimir o número
+    imprime_numero(frame_selecionado, pio, sm);
+}
