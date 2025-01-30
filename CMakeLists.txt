@@ -42,7 +42,7 @@ pico_set_program_name(LedMatrixInterrupt "LedMatrixInterrupt")
 pico_set_program_version(LedMatrixInterrupt "0.1")
 
 # Adicionando o arquivo PIO
-pico_generate_pio_header(LedMatrixInterrupt ${CMAKE_CURRENT_LIST_DIR}/pio_matrix.pio)
+pico_generate_pio_header(LedMatrixInterrupt ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/generated)
 
 # Modify the below lines to enable/disable output over UART/USB
 pico_enable_stdio_uart(LedMatrixInterrupt 0)

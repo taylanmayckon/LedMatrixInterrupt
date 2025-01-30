@@ -12,6 +12,7 @@
 #define RGB_BLUE 12
 #define BUTTON_A 5
 #define BUTTON_B 6
+#define IS_RGBW false
 #define LED_MATRIX_PIN 7
 
 // Definindo a máscara para GPIOs do Led RGB (11, 12 e 13)
@@ -30,24 +31,6 @@ static volatile uint32_t last_time = 0;
 PIO pio;
 uint sm;
 
-// Função de configuração do PIO
-uint pio_config(PIO pio){
-    bool ok;
-
-    // Colocando a frequência de clock para 128 MHz, facilitando a divisão de clock
-    ok = set_sys_clock_khz(128000, false);
-
-    printf("iniciando a transmissão PIO");
-    if (ok) printf("clock set to %ld\n", clock_get_hz(clk_sys));
-
-    // Configurações da PIO
-    uint offset = pio_add_program(pio, &pio_matrix_program);
-    uint sm = pio_claim_unused_sm(pio, true);
-    pio_matrix_program_init(pio, sm, offset, LED_MATRIX_PIN);
-
-    return sm;
-}
-
 // Função de interrupção
 void gpio_irq_handler(uint gpio, uint32_t events){
     // Obtendo o tempo atual (em microssegundos)
@@ -60,10 +43,10 @@ void gpio_irq_handler(uint gpio, uint32_t events){
 
         // Imprime o número na matriz com base no botão pressionado
         if(gpio == BUTTON_A){ // Incrementa o número exibido
-            atualiza_numero(contador, pio, sm);
+            atualiza_numero(contador);
         }
         if(gpio == BUTTON_B){ // Decrementa o número exibido
-            atualiza_numero(contador, pio, sm);
+            atualiza_numero(contador);
         }
     }
 }
@@ -84,7 +67,10 @@ int main(){
 
     // Inicializando a PIO
     pio = pio0;
-    sm = pio_config(pio);
+    sm = 0;
+
+    uint offset = pio_add_program(pio, &ws2812_program);
+    ws2812_program_init(pio, sm, offset, LED_MATRIX_PIN, 800000, IS_RGBW);
 
     // Configuração das interrupções
     gpio_set_irq_enabled_with_callback(BUTTON_A, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);

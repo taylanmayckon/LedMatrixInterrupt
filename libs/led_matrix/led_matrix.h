@@ -3,27 +3,15 @@
 
 #include "hardware/clocks.h"
 #include "hardware/timer.h"
-#include "pio_matrix.pio.h"
-
-// Criando estrutura struct para controlar a cor dos LEDS
-typedef struct {
-    double red;
-    double green;
-    double blue;
-}RGB_defs;
-
-// Variável que vai armazenar cores individualmente
-typedef RGB_defs RGB_cod;
-// Vetor que vai armazenar as cores num formato 5x5 (para facilitar a interpretação da matriz de leds)
-typedef RGB_defs Matrix_frames[5][5];
-// Vetor de ponteiros que armazena 10 ponteiros para o tipo Matrix_frames
-typedef Matrix_frames* Frames_compiled[10];
+#include "ws2812.pio.h"
 
 // Declaração das funções utilizadas na lib led_matrix
-uint32_t gera_binario_rgb(double red, double green, double blue);
+static inline void put_pixel(uint32_t pixel_grb);
 
-void imprime_numero(Matrix_frames frame, PIO pio, uint sm);
+uint32_t urgb_u32(double r, double g, double b);
 
-void atualiza_numero(uint16_t numero, PIO pio, uint sm);
+void set_one_led(uint8_t r, uint8_t g, uint8_t b);
+
+void atualiza_numero(uint16_t numero);
 
 #endif
