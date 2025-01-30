@@ -41,9 +41,14 @@ uint pio_config(PIO pio){
 // Função de interrupção
 void gpio_irq_handler(uint gpio, uint32_t events){
     // Inicialmente vai blinkar outras cores, só para teste
-
-    bool estado_green = gpio_get(RGB_GREEN);
-    gpio_put(RGB_GREEN, !estado_green);
+    if(gpio == 5){
+        bool estado_green = gpio_get(RGB_GREEN);
+        gpio_put(RGB_GREEN, !estado_green);
+    }
+    if(gpio == 6){
+        bool estado_blue = gpio_get(RGB_BLUE);
+        gpio_put(RGB_BLUE, !estado_blue);
+    }
 }
 
 int main(){
@@ -68,6 +73,7 @@ int main(){
 
     // Configuração das interrupções
     gpio_set_irq_enabled_with_callback(BUTTON_A, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
+    gpio_set_irq_enabled_with_callback(BUTTON_B, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
 
     while (true) {
         // Alternando o estado do led a cada 100ms (gera um período de 200ms = 5 piscadas por segundo)
