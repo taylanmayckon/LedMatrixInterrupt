@@ -9,6 +9,8 @@
 // Definindo a máscara para GPIOs do Led RGB (11, 12 e 13)
 #define GPIO_MASK ((1 << RGB_RED) | (1 << RGB_GREEN) | (1 << RGB_BLUE))
 
+// Variável que vai servir pra alternar o estado do LED
+bool led_on = false;
 
 int main(){
     stdio_init_all();
@@ -19,10 +21,9 @@ int main(){
     gpio_set_dir_out_masked(GPIO_MASK);
 
     while (true) {
-        gpio_put(RGB_RED, 1);
-        sleep_ms(100);
-
-        gpio_put(RGB_RED, 0);
+        // Alternando o estado do led a cada 100ms (gera um período de 200ms = 5 piscadas por segundo)
+        led_on = !led_on;
+        gpio_put(RGB_RED, led_on);
         sleep_ms(100);
     }
 }
