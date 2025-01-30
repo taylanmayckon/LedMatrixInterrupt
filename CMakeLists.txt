@@ -35,7 +35,8 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(LedMatrixInterrupt LedMatrixInterrupt.c )
+add_executable(LedMatrixInterrupt LedMatrixInterrupt.c 
+    libs/led_matrix/led_matrix.c)
 
 pico_set_program_name(LedMatrixInterrupt "LedMatrixInterrupt")
 pico_set_program_version(LedMatrixInterrupt "0.1")
@@ -57,6 +58,7 @@ hardware_adc)
 # Add the standard include files to the build
 target_include_directories(LedMatrixInterrupt PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/libs/led_matrix
 )
 
 # Add any user requested libraries

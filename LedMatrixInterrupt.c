@@ -4,6 +4,7 @@
 #include "hardware/pio.h"
 #include "hardware/clocks.h"
 #include "pio_matrix.pio.h"
+#include "libs/led_matrix/led_matrix.h"
 
 // Definição dos pinos do Led RGB
 #define RGB_RED 13
@@ -15,6 +16,7 @@
 
 // Definindo a máscara para GPIOs do Led RGB (11, 12 e 13)
 #define OUTPUT_MASK ((1 << RGB_RED) | (1 << RGB_GREEN) | (1 << RGB_BLUE))
+// Máscara para GPIO dos botões
 #define INPUT_MASK ((1 << BUTTON_A) | (1 << BUTTON_B))
 
 // Variável que vai servir pra alternar o estado do LED
