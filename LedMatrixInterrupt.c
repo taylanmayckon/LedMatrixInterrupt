@@ -19,8 +19,8 @@
 // Máscara para GPIO dos botões
 #define INPUT_MASK ((1 << BUTTON_A) | (1 << BUTTON_B))
 
-// Variável que vai servir pra alternar o estado do LED
-bool led_on = false;
+// Variável de contador para a interrupção
+uint16_t contagem = 0;
 
 // Função de configuração do PIO
 uint pio_config(PIO pio){
