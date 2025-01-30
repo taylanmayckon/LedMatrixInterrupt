@@ -9,10 +9,13 @@
 #define RGB_RED 13
 #define RGB_GREEN 11
 #define RGB_BLUE 12
+#define BUTTON_A 5
+#define BUTTON_B 6
 #define LED_MATRIX_PIN 7
 
 // Definindo a máscara para GPIOs do Led RGB (11, 12 e 13)
-#define GPIO_MASK ((1 << RGB_RED) | (1 << RGB_GREEN) | (1 << RGB_BLUE))
+#define OUTPUT_MASK ((1 << RGB_RED) | (1 << RGB_GREEN) | (1 << RGB_BLUE))
+#define INPUT_MASK ((1 << BUTTON_A) | (1 << BUTTON_B))
 
 // Variável que vai servir pra alternar o estado do LED
 bool led_on = false;
@@ -35,17 +38,36 @@ uint pio_config(PIO pio){
     return sm;
 }
 
+// Função de interrupção
+void gpio_irq_handler(uint gpio, uint32_t events){
+    // Inicialmente vai blinkar outras cores, só para teste
+
+    bool estado_green = gpio_get(RGB_GREEN);
+    gpio_put(RGB_GREEN, !estado_green);
+}
+
 int main(){
     stdio_init_all();
 
-    // Inicializando todos os pinos da máscara
-    gpio_init_mask(GPIO_MASK);
+    // Inicializando todos os pinos da máscara de OUTPUT
+    gpio_init_mask(OUTPUT_MASK);
     // Definindo como saída
-    gpio_set_dir_out_masked(GPIO_MASK);
+    gpio_set_dir_out_masked(OUTPUT_MASK);
+
+    // Inicializando todos os pinos da máscara de INPUT
+    gpio_init_mask(INPUT_MASK);
+    // Definindo os botões como pull up
+    gpio_pull_up(BUTTON_A);
+    gpio_pull_up(BUTTON_B);
+
+    // Configurando os pinos de pull_up
 
     // Inicializando a PIO
     PIO pio = pio0;
     uint sm = pio_config(pio);
+
+    // Configuração das interrupções
+    gpio_set_irq_enabled_with_callback(BUTTON_A, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
 
     while (true) {
         // Alternando o estado do led a cada 100ms (gera um período de 200ms = 5 piscadas por segundo)
@@ -54,3 +76,5 @@ int main(){
         sleep_ms(100);
     }
 }
+
+
