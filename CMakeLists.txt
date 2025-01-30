@@ -40,13 +40,19 @@ add_executable(LedMatrixInterrupt LedMatrixInterrupt.c )
 pico_set_program_name(LedMatrixInterrupt "LedMatrixInterrupt")
 pico_set_program_version(LedMatrixInterrupt "0.1")
 
+# Adicionando o arquivo PIO
+pico_generate_pio_header(LedMatrixInterrupt ${CMAKE_CURRENT_LIST_DIR}/pio_matrix.pio)
+
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(LedMatrixInterrupt 1)
+pico_enable_stdio_uart(LedMatrixInterrupt 0)
 pico_enable_stdio_usb(LedMatrixInterrupt 1)
 
 # Add the standard library to the build
 target_link_libraries(LedMatrixInterrupt
-        pico_stdlib)
+pico_stdlib
+hardware_pio
+hardware_clocks
+hardware_adc)
 
 # Add the standard include files to the build
 target_include_directories(LedMatrixInterrupt PRIVATE
@@ -55,7 +61,10 @@ target_include_directories(LedMatrixInterrupt PRIVATE
 
 # Add any user requested libraries
 target_link_libraries(LedMatrixInterrupt 
-        
+        pico_stdlib
+        hardware_pio
+        hardware_clocks
+        hardware_adc
         )
 
 pico_add_extra_outputs(LedMatrixInterrupt)
