@@ -23,83 +23,83 @@ uint8_t led_b = 0;
 
 // Declaração dos frames que serão exibidos na matriz de leds (espelhado-certo)
 bool frame_0[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0 (Certo)
-    1, 0, 0, 0, 1, // Linha 1 (Espelhado)
-    1, 0, 0, 0, 1, // Linha 2 (Certo)
-    1, 0, 0, 0, 1, // Linha 3 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 4 (Certo)
+    0, 1, 1, 1, 0, // Linha 0 (Certo)
+    0, 1, 0, 1, 0, // Linha 1 (Espelhado)
+    0, 1, 0, 1, 0, // Linha 2 (Certo)
+    0, 1, 0, 1, 0, // Linha 3 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 4 (Certo)
 };
 
 bool frame_1[NUM_PIXELS] = {
-    0, 0, 0, 0, 1, // Linha 0 (Certo)
-    1, 0, 0, 0, 0, // Linha 1 (Espelhado)
-    0, 0, 0, 0, 1, // Linha 3 (Certo)
-    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
-    0, 0, 0, 0, 1, // Linha 5 (Certo)
+    0, 0, 1, 0, 0, // Linha 0 (Certo)
+    0, 0, 1, 0, 0, // Linha 1 (Espelhado)
+    0, 0, 1, 0, 0, // Linha 3 (Certo)
+    0, 0, 1, 0, 0, // Linha 4 (Espelhado)
+    0, 0, 1, 0, 0, // Linha 5 (Certo)
 };
 
 bool frame_2[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0 (Certo)
-    1, 0, 0, 0, 0, // Linha 1 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 3 (Certo)
-    0, 0, 0, 0, 1, // Linha 4 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 5 (Certo)
+    0, 1, 1, 1, 0, // Linha 0 (Certo)
+    0, 1, 0, 0, 0, // Linha 1 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 3 (Certo)
+    0, 0, 0, 1, 0, // Linha 4 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 5 (Certo)
 };
 
 bool frame_3[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0 (Certo)
-    1, 0, 0, 0, 0, // Linha 1 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 3 (Certo)
-    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 5 (Certo)
+    0, 1, 1, 1, 0, // Linha 0 (Certo)
+    0, 1, 0, 0, 0, // Linha 1 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 3 (Certo)
+    0, 1, 0, 0, 0, // Linha 4 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 5 (Certo)
 };
 
 bool frame_4[NUM_PIXELS] = {
-    1, 0, 0, 0, 1, // Linha 0 (Certo)
-    1, 0, 0, 0, 1, // Linha 1 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 3 (Certo)
-    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
-    0, 0, 0, 0, 1, // Linha 5 (Certo)
+    0, 1, 0, 1, 0, // Linha 0 (Certo)
+    0, 1, 0, 1, 0, // Linha 1 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 3 (Certo)
+    0, 1, 0, 0, 0, // Linha 4 (Espelhado)
+    0, 0, 0, 1, 0, // Linha 5 (Certo)
 };
 
 bool frame_5[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0 (Certo)
-    0, 0, 0, 0, 1, // Linha 1 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 3 (Certo)
-    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 5 (Certo)
+    0, 1, 1, 1, 0, // Linha 0 (Certo)
+    0, 0, 0, 1, 0, // Linha 1 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 3 (Certo)
+    0, 1, 0, 0, 0, // Linha 4 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 5 (Certo)
 };
 
 bool frame_6[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0 (Certo)
-    0, 0, 0, 0, 1, // Linha 1 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 3 (Certo)
-    1, 0, 0, 0, 1, // Linha 4 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 5 (Certo)
+    0, 1, 1, 1, 0, // Linha 0 (Certo)
+    0, 0, 0, 1, 0, // Linha 1 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 3 (Certo)
+    0, 1, 0, 1, 0, // Linha 4 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 5 (Certo)
 };
 
 bool frame_7[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0 (Certo)
-    1, 0, 0, 0, 0, // Linha 1 (Espelhado)
-    0, 0, 0, 0, 1, // Linha 3 (Certo)
-    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
-    0, 0, 0, 0, 1, // Linha 5 (Certo)
+    0, 1, 1, 1, 0, // Linha 0 (Certo)
+    0, 1, 0, 0, 0, // Linha 1 (Espelhado)
+    0, 0, 0, 1, 0, // Linha 3 (Certo)
+    0, 1, 0, 0, 0, // Linha 4 (Espelhado)
+    0, 0, 0, 1, 0, // Linha 5 (Certo)
 };
 
 bool frame_8[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0 (Certo)
-    1, 0, 0, 0, 1, // Linha 1 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 3 (Certo)
-    1, 0, 0, 0, 1, // Linha 4 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 5 (Certo)
+    0, 1, 1, 1, 0, // Linha 0 (Certo)
+    0, 1, 0, 1, 0, // Linha 1 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 3 (Certo)
+    0, 1, 0, 1, 0, // Linha 4 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 5 (Certo)
 };
 
 bool frame_9[NUM_PIXELS] = {
-    1, 1, 1, 1, 1, // Linha 0 (Certo)
-    1, 0, 0, 0, 1, // Linha 1 (Espelhado)
-    1, 1, 1, 1, 1, // Linha 3 (Certo)
-    1, 0, 0, 0, 0, // Linha 4 (Espelhado)
-    0, 0, 0, 0, 1, // Linha 5 (Certo)
+    0, 1, 1, 1, 0, // Linha 0 (Certo)
+    0, 1, 0, 1, 0, // Linha 1 (Espelhado)
+    0, 1, 1, 1, 0, // Linha 3 (Certo)
+    0, 1, 0, 0, 0, // Linha 4 (Espelhado)
+    0, 0, 0, 1, 0, // Linha 5 (Certo)
 };
 ////////////////////////////////////// FRAMES UTILIZADOS //////////////////////////////////////
 
